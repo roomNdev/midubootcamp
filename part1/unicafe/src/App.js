@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Statistics = (props) => {
+const StatisticsLine = (props) => {
     return(
     <tr><td>{props.text}</td><td>{props.stat}</td></tr>
   )
@@ -45,13 +45,13 @@ const App = () => {
   let conditional = all !== 9 
   ? 
   <table>
-    <thead><Statistics text='good ' stat={good}/></thead>
+    <thead><StatisticsLine text='good ' stat={good}/></thead>
     <tbody>
-    <Statistics text='neutral ' stat={neutral}/>
-    <Statistics text='bad ' stat={bad}/>
-    <Statistics text='all ' stat={all}/>
-    <Statistics text='average ' stat={average}/>
-    <Statistics text='positive ' stat={positive}/>
+    <StatisticsLine text='neutral ' stat={neutral}/>
+    <StatisticsLine text='bad ' stat={bad}/>
+    <StatisticsLine text='all ' stat={all}/>
+    <StatisticsLine text='average ' stat={average}/>
+    <StatisticsLine text='positive ' stat={positive}/>
   </tbody>
   </table>
   :
