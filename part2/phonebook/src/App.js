@@ -2,6 +2,7 @@ import React, { useState,useEffect } from 'react'
 import { Persons } from './components/Persons'
 import { PersonForm } from './components/PersonForm'
 import { Filter } from './components/Filter'
+import { Notification } from './components/Notification'
 import personService from './services/personService'
 
 const App = () => {
@@ -9,6 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState("")
   const [newNumber, setNewNumber] = useState("")
   const [newFilter, setNewFilter] = useState("")
+  const [message, setMessage] = useState("")
 
   useEffect(() =>{
     personService
@@ -37,9 +39,28 @@ const App = () => {
         const personToUpdate = {...person, number: newNumber}
         personService
         .update(person.id,personToUpdate)
-        .then((res)=>setPersons(persons.filter((person)=>person.name !== personToUpdate.name).concat(res)  
-          )
+        .then((res)=>{setPersons(persons.filter((person)=>person.name !== personToUpdate.name).concat(res))
+        setNewName('')
+        setNewNumber('')
+          setMessage(
+          `Updated '${person.name}' `
         )
+        setTimeout(() => {
+          setMessage("")
+        }, 5000)
+          }
+        )
+        .catch(error => {
+          setMessage(
+            `Information of '${person.name}' was already deleted from server`
+          )
+          setTimeout(() => {
+            setMessage("")
+          }, 5000)
+          setPersons(persons.filter(n => n.name !== person.name))
+          setNewName('')
+          setNewNumber('')
+        })
       }
     }
     else {
@@ -48,8 +69,14 @@ const App = () => {
       .create(addName)
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
-      setNewName('')
-      setNewNumber('')})
+        setMessage(
+          `Added '${addName.name}' `
+          )
+        setTimeout(() => {
+          setMessage("")
+        }, 5000)
+        setNewName('')
+        setNewNumber('')})
       .catch((e) => console.error(e))
     }
   }
@@ -66,7 +93,7 @@ const App = () => {
   }
 
   const handlerDeletePerson = (name,id) => {
-    if(window.confirm(`Delete ${name}`))
+    if(window.confirm(`Delete ${name}?`))
     personService
       .deletePerson(id)
       .then(setPersons(persons.filter((person) => person.id !== id)))
@@ -75,6 +102,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message}/>
       <Filter handlerChangeFilter={handlerChangeFilter}/>
       <h2>add a new</h2>
         <PersonForm handlerSubmit={handlerSubmit} newName={newName} handlerNameChange={handlerNameChange} newNumber={newNumber} handlerNumberChange={handlerNumberChange} />
