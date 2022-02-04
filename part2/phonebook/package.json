@@ -19,6 +19,7 @@
     "eject": "react-scripts eject"
   },
   "proxy":"localhost:3001",
+  
   "browserslist": {
     "production": [
       ">0.2%",
