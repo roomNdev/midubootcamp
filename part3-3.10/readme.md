@@ -1,1 +1,1 @@
-the deployed app is in other repo (https://github.com/roomNdev/class3-backend)
+heroku app ૮ ˶ᵔ ᵕ ᵔ˶ ა :https://obscure-sands-43266.herokuapp.com/api/persons
