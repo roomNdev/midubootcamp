@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const morgan = require('morgan')
+// const morgan = require('morgan')
 
 let persons = [
     { 
@@ -25,23 +25,24 @@ let persons = [
     }
 ]
 
-morgan.token('data', (req) => {
-  return req.method === 'POST'
-    ? JSON.stringify(req.body)
-    : null
-})
+// morgan.token('data', (req) => {
+//   return req.method === 'POST'
+//     ? JSON.stringify(req.body)
+//     : null
+// })
 
 app.use(express.json())
-app.use(morgan((tokens, req, res) => {
-  return [
-    tokens.method(req, res),
-    tokens.url(req, res),
-    tokens.status(req, res),
-    tokens.res(req, res, 'content-length'), '-',
-    tokens['response-time'](req, res), 'ms',
-    tokens.data(req, res)
-  ].join(' ')
-}))
+app.use(express.static('build'))
+// app.use(morgan((tokens, req, res) => {
+//   return [
+//     tokens.method(req, res),
+//     tokens.url(req, res),
+//     tokens.status(req, res),
+//     tokens.res(req, res, 'content-length'), '-',
+//     tokens['response-time'](req, res), 'ms',
+//     tokens.data(req, res)
+//   ].join(' ')
+// }))
 
 
 app.post('/api/persons', (request, response) => {
@@ -95,7 +96,7 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
   })
 
-const PORT = procces.env.PORT || 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
