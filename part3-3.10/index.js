@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
-const morgan = require('morgan')
+const cors = require('cors')
+// const morgan = require('morgan')
 
 let persons = [
     { 
@@ -25,23 +26,24 @@ let persons = [
     }
 ]
 
-morgan.token('data', (req) => {
-  return req.method === 'POST'
-    ? JSON.stringify(req.body)
-    : null
-})
-
+// morgan.token('data', (req) => {
+//   return req.method === 'POST'
+//     ? JSON.stringify(req.body)
+//     : null
+// })
+app.use(express.static('build'))
 app.use(express.json())
-app.use(morgan((tokens, req, res) => {
-  return [
-    tokens.method(req, res),
-    tokens.url(req, res),
-    tokens.status(req, res),
-    tokens.res(req, res, 'content-length'), '-',
-    tokens['response-time'](req, res), 'ms',
-    tokens.data(req, res)
-  ].join(' ')
-}))
+app.use(cors())
+// app.use(morgan((tokens, req, res) => {
+//   return [
+//     tokens.method(req, res),
+//     tokens.url(req, res),
+//     tokens.status(req, res),
+//     tokens.res(req, res, 'content-length'), '-',
+//     tokens['response-time'](req, res), 'ms',
+//     tokens.data(req, res)
+//   ].join(' ')
+// }))
 
 
 app.post('/api/persons', (request, response) => {
@@ -65,7 +67,7 @@ app.post('/api/persons', (request, response) => {
         number: body.number
     }
     persons = persons.concat(person)
-    response.json(persons)
+    response.json(person)
   })
 
 app.get('/api/persons', (request, response) => {
@@ -95,7 +97,19 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
   })
 
-const PORT = 3001
+app.put('/api/persons/:id', (request, response)=>{
+  const id = Number(request.params.id)
+  const body = request.body
+  const person = {
+    id: id,
+    name: body.name,
+    number: body.number
+}
+  persons.concat(person)
+  response.json(person)
+})
+
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })

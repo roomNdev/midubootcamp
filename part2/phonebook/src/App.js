@@ -32,11 +32,12 @@ const App = () => {
   const handlerSubmit = (e) => {
     e.preventDefault()
     const match = (name1,name2)=>name1.toLowerCase() === name2.toLowerCase()
-    const person = persons.find((person)=>match(person.name, newName))
+    const person = persons.find((person)=>match(person.name, newName.trim()))
 
   if(person){
       if (window.confirm(`${person.name} is already added to the phonebook, do you want to change the number to ${newNumber}?`)){
         const personToUpdate = {...person, number: newNumber}
+        console.log(personToUpdate);
         personService
         .update(person.id,personToUpdate)
         .then((res)=>{setPersons(persons.filter((person)=>person.name !== personToUpdate.name).concat(res))
