@@ -62,8 +62,9 @@ const App = () => {
           setNewNumber('')
         })
       }
+      return
     }
-    else {
+    
       const addName = { name: newName, number: newNumber}
       personService
       .create(addName)
@@ -75,11 +76,18 @@ const App = () => {
         setTimeout(() => {
           setMessage("")
         }, 5000)
-        setNewName('')
-        setNewNumber('')})
-      .catch((e) => console.error(e))
+      setNewName('')
+      setNewNumber('')
     }
+      )
+      .catch((error) => {
+        setMessage(error.response.data.error);
+        setTimeout(() => setMessage(""), 5000);
+        console.error(error);
+    }
+    )
   }
+  
 
  const filter = newFilter === ""
           ? persons

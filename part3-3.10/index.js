@@ -24,58 +24,73 @@ app.use(express.static('build'))
 // }))
 
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response,next) => {
   const body = request.body
 
   if (!body.name || !body.number) {
-    return response.status(400).json({error: 'content missing'})
-    }
+    return response.status(400).json({ error: 'name or number missing' })
+  }
 
-    const person = new Person({
-        name: body.name,
-        number: body.number
-    })
-    person.save()
-    .then(savedPerson => response.json(savedPerson))
-    .catch(err => next(err))
+  const person = new Person({
+    name: body.name,
+    number: body.number
   })
-
- 
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' })
-}
-
-app.get('/api/persons', (request, response) => {
-  Person.find({})
-  .then(persons => response.json(persons))
-  .catch(err => next(err))
+  person.save()
+    .then(savedPerson => response.json(savedPerson))
+    .catch(error => next(error))
 })
 
-app.get('/api/persons/:id', (request, response) => {
-    Person.findById(request.params.id)
-    .then(person=>response.json(person))
-    .catch(err => next(err))
-  })
+app.get('/api/persons', (request, response,next) => {
+  Person.find({})
+    .then(persons => response.json(persons))
+    .catch(error => next(error))
+})
+
+app.get('/api/persons/:id', (request, response,next) => {
+  Person.findById(request.params.id)
+    .then(person => response.json(person))
+    .catch(error => next(error))
+})
 
 app.delete('/api/persons/:id', (request, response,next) => {
-    Person.findByIdAndDelete(request.params.id)
-      .then(()=>{
+  Person.findByIdAndDelete(request.params.id)
+    .then(() => {
       response.status(204).end()})
-      .catch(err => next(err))
-  })
+    .catch(error => next(error))
+})
 
 app.put('/api/persons/:id', (request, response, next) => {
   const body = request.body
-  personToUpdate = {
+  const personToUpdate = {
     name: body.name,
     number: body.number
   }
   Person.findByIdAndUpdate(request.params.id,personToUpdate,{ new: true })
     .then(resolve => response.json(resolve))
-    .catch(err => next(err))
+    .catch(error => next(error))
 })
 
+
+const unknownEndpoint = (error,request, response) => {
+  response.status(404).send({ error: `${error}` })
+}
+
 app.use(unknownEndpoint)
+
+const errorHandler = (error, req, res, next) => {
+  console.log(error)
+  if (error.name === 'CastError' && error.kind === 'ObjectId') {
+    return res.status(400).send({ error: 'Improper id format' })
+  }
+  else if (error.name === 'ValidationError') {
+    return res.status(400).send({ error: error.message })
+  }
+
+  next(error)
+}
+
+app.use(errorHandler)
+
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
