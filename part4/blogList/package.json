@@ -1,0 +1,29 @@
+{
+  "name": "bloglist",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run index.js",
+    "dev": "nodemon index.js",
+    "test": "jest --verbose"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "4.17.2",
+    "lodash": "^4.17.21",
+    "mongoose": "6.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.8.0",
+    "eslint-plugin-import": "^2.25.4",
+    "jest": "^27.5.0",
+    "nodemon": "2.0.15"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
