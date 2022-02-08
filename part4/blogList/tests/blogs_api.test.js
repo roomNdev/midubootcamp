@@ -22,10 +22,11 @@ const initialNotes = [
 ]
 beforeEach(async () => {
   await Blog.deleteMany({})
-  let noteObject = new Blog(initialNotes[0])
-  await noteObject.save()
-  noteObject = new Blog(initialNotes[1])
-  await noteObject.save()
+  
+  for (let blog of initialNotes) {
+    let blogObject = new Blog(blog)
+    await blogObject.save()}
+  
 })
 
 const api = supertest(app)
