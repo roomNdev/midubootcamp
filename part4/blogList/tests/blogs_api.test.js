@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
-const Blog = require('../models/blog')
+const Blog = require('../models/Blog')
 const initialNotes = [
   {
     _id: '5a422aa71b54a676234d17f8',
