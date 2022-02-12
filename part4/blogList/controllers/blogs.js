@@ -20,8 +20,10 @@ blogRouter.get('/:id', async (request, response,next) => {
   
   
 blogRouter.post('', async (request, response,next) => {
-
   try{
+    if(!request.decodedToken || !request.token || !request.user){
+      return response.status(400).json({error:'missing or invalid token'})
+    }
     const body = request.body
     const user = await User.findById(request.decodedToken.id)
     const newBlog = {
@@ -29,7 +31,7 @@ blogRouter.post('', async (request, response,next) => {
       author: body.author,
       url: body.url,
       likes: body.likes || 0,
-      user: request.decodedToken.id,
+      user: request.user.id
     }
 
     const blog = new Blog(newBlog)
@@ -38,18 +40,24 @@ blogRouter.post('', async (request, response,next) => {
     user.blogs = user.blogs.concat(result._id)
     await user.save()
     const populatedResult = await result
-      .populate('user', {usernamme:1 , name:1})
+      .populate('user', {username:1 , name:1})
       .execPopulate()
 
     response.status(201).json(populatedResult.toJSON())}
   catch(error){next(error)}
 })
 
-blogRouter.delete('/:id', async (request, response,next) => {
-  try {
+blogRouter.delete('/:id', async (request, response) => {
+  if(!request.decodedToken || !request.token || !request.user){
+    return response.status(400).json({error:'missing or invalid token'})
+  }
+  const blogToDelete = await Blog.findById(request.params.id)
+  const userId = request.decodedToken.id
+  if(userId.toString() === blogToDelete.user.toString()){
     await Blog.findByIdAndDelete(request.params.id)
     response.status(204).end()}
-  catch(error){next(error)}
+  else {response.status(400).json({error:'missing or invalid token'})
+  }
 })
 
 blogRouter.put('/:id', async (request, response,next) => {

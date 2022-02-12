@@ -8,8 +8,12 @@ const PORT = process.env.NODE_ENV === 'test'
   : process.env.PORT
 
 const JWT_SEC = process.env.JWT_SEC
+
+const TOKEN = process.env.TOKEN
+
 module.exports = {
   MONGODB_URI,
   PORT,
-  JWT_SEC
+  JWT_SEC,
+  TOKEN
 }
