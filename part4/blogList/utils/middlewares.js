@@ -45,12 +45,12 @@ const unknownEndpoint = (request, response) => {
 }
    
 const errorHandler = (error, request, response, next) => {
-  console.log(error)
+  //console.log(error)
   if (error.name === 'CastError' && error.kind === 'ObjectId') {
     return response.status(400).send({ error: 'Improper id format' })
   }
   else if (error.name === 'ValidationError') {
-    return response.status(400).send({ error: error.message })
+    return response.status(400).json({ error: error.message })
   }
   else if (error.name === 'JsonWebTokenError'){
     return response.status(401).json({error: 'missing or invalid token'})
