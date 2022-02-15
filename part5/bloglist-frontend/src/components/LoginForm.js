@@ -1,6 +1,32 @@
-import React from 'react'
+import PropTypes from 'prop-types'
+import React,{ useState }from 'react'
+import blogService from '../services/blogs'
+import {login} from '../services/login'
 
-const LoginForm = ({handleLogin,username,password,setUsername,setPassword}) => (
+const LoginForm = ({notification, setUser}) => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+
+  const handleLogin = (event) => {
+    event.preventDefault()
+    try {
+      const user = login({
+        username, password,
+      })
+      setUser(user)
+      window.localStorage.setItem(
+        'loggedNoteappUser', JSON.stringify(user)
+      ) 
+      blogService.setToken(user.token)
+      notification('Succesfully logged', 'success')
+      setUsername('')
+      setPassword('')
+    } catch (exception) {
+      notification('Wrong username or password', 'error')
+    }
+  }
+  
+  return(
     <form onSubmit={handleLogin}>
       <div>
         username
@@ -22,6 +48,11 @@ const LoginForm = ({handleLogin,username,password,setUsername,setPassword}) => (
       </div>
       <button type="submit">login</button>
     </form>      
-  )
+  )}
 
 export {LoginForm}
+
+LoginForm.propTypes = {
+  notification: PropTypes.func.isRequired,
+  setUser: PropTypes.func.isRequired
+}

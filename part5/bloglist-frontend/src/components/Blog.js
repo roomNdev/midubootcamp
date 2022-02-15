@@ -1,9 +1,68 @@
-import React from 'react'
-const Blog = ({blog}) => (
-  <div>
-    <h2>title: {blog.title} </h2>
-    <p>author: {blog.author}</p>
+import PropTypes from 'prop-types'
+import React,{ useState} from 'react'
+import {Togglable} from './Togglable'
+import blogService from '../services/blogs'
+const Blog = ({blog, allBlogs, setBlogs, user, notification}) => {
+  const [likes, setLikes] = useState(blog.likes)
+
+const userIsCreator = blog.user[0].username === user.username
+
+  const blogStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: 'solid',
+    borderWidth: 1,
+    marginBottom: 5,
+  }
+
+  const handleAddLike = async() => {
+    try {
+    const blogToUpdate = {...blog, likes: blog.likes + 1}
+    await blogService.update(blogToUpdate)
+    setLikes(blogToUpdate.likes)
+    notification(`added like`, 'success')
+  }
+    catch(err) {
+      notification(`couldn't update likes`, 'error')
+    }
+  }
+
+  const handleDelete = async() => {
+    const blogToDelete = blog
+    if(window.confirm(`Remove ${blog.title} by ${blog.author}?`)){
+      try {
+      await blogService.deleteBlog(blogToDelete.id)
+      setBlogs(allBlogs.filter((a) => a.id !== blogToDelete.id))
+      notification(`succesfuly deleted blog`,'success')
+      } 
+      catch(err) {
+        console.log(err);
+      notification(`couldn't delete blog`,'error')
+    }
+    }
+  }
+
+  return(
+  <div style={blogStyle}>
+    <h2>{blog.title} {blog.author}</h2>
+    <Togglable buttonLabel='view'>
+      <p>url: {blog.url}</p>
+      <p>likes: {likes} <button onClick={handleAddLike}>like</button></p>
+      <p>{blog.user[0].username}</p>
+      {userIsCreator?
+      <button onClick={handleDelete}>delete</button>
+    : <></>
+    }
+    </Togglable>
   </div>  
-)
+)}
 
 export default Blog
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  allBlogs: PropTypes.array.isRequired,
+  setBlogs: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  notification: PropTypes.func.isRequired
+}
