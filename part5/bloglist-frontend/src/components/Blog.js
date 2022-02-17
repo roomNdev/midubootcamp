@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React,{ useState} from 'react'
 import {Togglable} from './Togglable'
 import blogService from '../services/blogs'
-const Blog = ({blog, allBlogs, setBlogs, user, notification}) => {
+const Blog = ({blog, allBlogs, setBlogs, user, notification, handleAddLike}) => {
   const [likes, setLikes] = useState(blog.likes)
 
 const userIsCreator = blog.user[0].username === user.username
@@ -13,18 +13,6 @@ const userIsCreator = blog.user[0].username === user.username
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5,
-  }
-
-  const handleAddLike = async() => {
-    try {
-    const blogToUpdate = {...blog, likes: blog.likes + 1}
-    await blogService.update(blogToUpdate)
-    setLikes(blogToUpdate.likes)
-    notification(`added like`, 'success')
-  }
-    catch(err) {
-      notification(`couldn't update likes`, 'error')
-    }
   }
 
   const handleDelete = async() => {
@@ -44,10 +32,11 @@ const userIsCreator = blog.user[0].username === user.username
 
   return(
   <div style={blogStyle}>
-    <h2>{blog.title} {blog.author}</h2>
+    <h2 className="blogTitle">{blog.title} </h2>
+    <h2 className="blogAuthor">{blog.author}</h2>
     <Togglable buttonLabel='view'>
-      <p>url: {blog.url}</p>
-      <p>likes: {likes} <button onClick={handleAddLike}>like</button></p>
+      <p className="blogUrl">url: {blog.url}</p>
+      <p className="blogLikes">likes: {likes} <button onClick={handleAddLike}>like</button></p>
       <p>{blog.user[0].username}</p>
       {userIsCreator?
       <button onClick={handleDelete}>delete</button>
@@ -61,8 +50,8 @@ export default Blog
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  allBlogs: PropTypes.array.isRequired,
+  allBlogs: PropTypes.array,
   setBlogs: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
-  notification: PropTypes.func.isRequired
+  notification: PropTypes.func
 }

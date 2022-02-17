@@ -42,6 +42,41 @@ const App = () => {
     setUser(null)
   }
 
+  //this is here and not in the Blog.js file component because of test
+  //puroses, anyways it works properly
+  const handleAddLike = async() => {
+    try {
+    const blogToUpdate = {...blog, likes: blog.likes + 1}
+    await blogService.update(blogToUpdate)
+    setLikes(blogToUpdate.likes)
+    notification(`added like`, 'success')
+  }
+    catch(err) {
+      notification(`couldn't update likes`, 'error')
+    }
+  }
+
+
+  const handleNewBlog = async (event) => {
+    event.preventDefault()
+    try{
+      const newBlog ={
+        title,
+        author,
+        url
+      }
+    const response = await blogService.create(newBlog)
+    notification(`New blog created '${title}' by ${author}`, 'success')
+    setBlogs(blogs.concat(response))
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+    }
+      catch(err) {
+        notification("Couldn't create a new blog", 'error')
+      }
+  } 
+
   return (
     <div>
       {user === null ?
@@ -54,9 +89,8 @@ const App = () => {
         <p>logged as '{user.username}' <button onClick={handlelogOut}>log out</button></p>
         <Togglable buttonLabel='Create a new blog'>
           <NewBlog
-          notification={notification}
-          setBlogs={setBlogs}
-          blogs={blogs}/>
+          handleNewBlog={handleNewBlog}
+          />
         </Togglable>
         <h2>blogs</h2>
         {blogs
@@ -68,7 +102,8 @@ const App = () => {
           allBlogs={blogs}
           setBlogs={setBlogs} 
           user={user} 
-          notification={notification}/>
+          notification={notification}
+          handleAddLike={handleAddLike}/>
           )}
       </>
       }
