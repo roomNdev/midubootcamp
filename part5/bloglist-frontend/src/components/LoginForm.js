@@ -7,11 +7,11 @@ const LoginForm = ({notification, setUser}) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const user = login({
-        username, password,
+      const user = await login({
+        username, password
       })
       setUser(user)
       window.localStorage.setItem(
@@ -30,7 +30,8 @@ const LoginForm = ({notification, setUser}) => {
     <form onSubmit={handleLogin}>
       <div>
         username
-          <input
+        <input
+          id='login-form-input-username'
           type="text"
           value={username}
           name="Username"
@@ -39,7 +40,8 @@ const LoginForm = ({notification, setUser}) => {
       </div>
       <div>
         password
-          <input
+        <input
+          id='login-form-input-password'
           type="password"
           value={password}
           name="Password"

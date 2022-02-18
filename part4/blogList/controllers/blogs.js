@@ -31,7 +31,7 @@ blogRouter.post('', async (request, response,next) => {
       author: body.author,
       url: body.url,
       likes: body.likes || 0,
-      user: request.user.id
+      user: user.id
     }
 
     const blog = new Blog(newBlog)

@@ -23,16 +23,16 @@ const App = () => {
   }
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+    blogService.getAll().then(blog => {
+      setBlogs(blog)}
     )  
   }, [])
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
+      const newUser = JSON.parse(loggedUserJSON)
+      setUser(newUser)
+      blogService.setToken(newUser.token)
     }
   }, [])
 
@@ -42,70 +42,40 @@ const App = () => {
     setUser(null)
   }
 
-  //this is here and not in the Blog.js file component because of test
-  //puroses, anyways it works properly
-  const handleAddLike = async() => {
-    try {
-    const blogToUpdate = {...blog, likes: blog.likes + 1}
-    await blogService.update(blogToUpdate)
-    setLikes(blogToUpdate.likes)
-    notification(`added like`, 'success')
-  }
-    catch(err) {
-      notification(`couldn't update likes`, 'error')
-    }
-  }
-
-
-  const handleNewBlog = async (event) => {
-    event.preventDefault()
-    try{
-      const newBlog ={
-        title,
-        author,
-        url
-      }
-    const response = await blogService.create(newBlog)
-    notification(`New blog created '${title}' by ${author}`, 'success')
-    setBlogs(blogs.concat(response))
-    setTitle('')
-    setAuthor('')
-    setUrl('')
-    }
-      catch(err) {
-        notification("Couldn't create a new blog", 'error')
-      }
-  } 
-
   return (
     <div>
       {user === null ?
-      <>
-        <Notification message={errorMessage}/>
-        <LoginForm notification={notification} setUser={setUser}/> 
-      </>:
-      <>
-        <Notification message={errorMessage}/>
-        <p>logged as '{user.username}' <button onClick={handlelogOut}>log out</button></p>
-        <Togglable buttonLabel='Create a new blog'>
-          <NewBlog
-          handleNewBlog={handleNewBlog}
-          />
-        </Togglable>
-        <h2>blogs</h2>
-        {blogs
-        .sort((a,b) => b.likes - a.likes)
-        .map(blog =>
-          <Blog 
-          key={blog.id} 
-          blog={blog}
-          allBlogs={blogs}
-          setBlogs={setBlogs} 
-          user={user} 
-          notification={notification}
-          handleAddLike={handleAddLike}/>
-          )}
-      </>
+        <>
+          <Notification message={errorMessage}/>
+          <LoginForm notification={notification} setUser={setUser}/> 
+        </>:
+        <>
+          <Notification message={errorMessage}/>
+          <p>logged as {user.username} <button onClick={handlelogOut}>log out</button></p>
+          <Togglable buttonLabel='Create a new blog'>
+            <NewBlog
+              setBlogs={setBlogs}
+              notification={notification}
+              blogs={blogs}
+            />
+          </Togglable>
+          <h2>blogs</h2>
+          <div>
+            {
+              blogs
+                .sort((a,b) => b.likes - a.likes)
+                .map(blog =>
+                  <Blog 
+                    key={blog.id} 
+                    blog={blog}
+                    allBlogs={blogs}
+                    setBlogs={setBlogs} 
+                    user={user} 
+                    notification={notification}>
+                  </Blog>
+                )}
+          </div>
+        </>
       }
     </div>
   )

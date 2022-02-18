@@ -1,7 +1,9 @@
-export default {
+module.exports ={
   'env': {
     'browser': true,
-    'es2021': true
+    'es2021': true,
+    'jest/globals': true,
+    'cypress/globals': true
   },
   'extends': [
     'eslint:recommended',
@@ -15,7 +17,7 @@ export default {
     'sourceType': 'module'
   },
   'plugins': [
-    'react'
+    'react', 'jest', 'cypress'
   ],
   'rules': {
     'indent': [

@@ -2,10 +2,22 @@ import PropTypes from 'prop-types'
 import React,{ useState} from 'react'
 import {Togglable} from './Togglable'
 import blogService from '../services/blogs'
-const Blog = ({blog, allBlogs, setBlogs, user, notification, handleAddLike}) => {
+const Blog = ({blog, allBlogs, setBlogs, user, notification}) => {
   const [likes, setLikes] = useState(blog.likes)
 
-const userIsCreator = blog.user[0].username === user.username
+  const handleAddLike = async() => {
+    try {
+      const blogToUpdate = {...blog, likes: blog.likes + 1}
+      await blogService.update(blogToUpdate)
+      setLikes(blogToUpdate.likes)
+      notification('added like', 'success')
+    }
+    catch(err) {
+      notification('couldn\'t update likes', 'error')
+    }
+  }
+
+  const userIsCreator = blog.user[0].username === user.username
 
   const blogStyle = {
     paddingTop: 10,
@@ -19,32 +31,33 @@ const userIsCreator = blog.user[0].username === user.username
     const blogToDelete = blog
     if(window.confirm(`Remove ${blog.title} by ${blog.author}?`)){
       try {
-      await blogService.deleteBlog(blogToDelete.id)
-      setBlogs(allBlogs.filter((a) => a.id !== blogToDelete.id))
-      notification(`succesfuly deleted blog`,'success')
+        await blogService.deleteBlog(blogToDelete.id)
+        setBlogs(allBlogs.filter((a) => a.id !== blogToDelete.id))
+        notification('succesfuly deleted blog','success')
       } 
       catch(err) {
-        console.log(err);
-      notification(`couldn't delete blog`,'error')
-    }
+        console.log(err)
+        notification('couldn\'t delete blog','error')
+      }
     }
   }
+  
 
   return(
-  <div style={blogStyle}>
-    <h2 className="blogTitle">{blog.title} </h2>
-    <h2 className="blogAuthor">{blog.author}</h2>
-    <Togglable buttonLabel='view'>
-      <p className="blogUrl">url: {blog.url}</p>
-      <p className="blogLikes">likes: {likes} <button onClick={handleAddLike}>like</button></p>
-      <p>{blog.user[0].username}</p>
-      {userIsCreator?
-      <button onClick={handleDelete}>delete</button>
-    : <></>
-    }
-    </Togglable>
-  </div>  
-)}
+    <div style={blogStyle}>
+      <h2 className="blogTitle">{blog.title} </h2>
+      <h2 className="blogAuthor">{blog.author}</h2>
+      <Togglable buttonLabel='view'>
+        <p className="blogUrl">url: {blog.url}</p>
+        <p className="blogLikes">likes: {likes} <button onClick={handleAddLike}>like</button></p>
+        <p>{blog.user[0].username}</p>
+        {userIsCreator?
+          <button onClick={handleDelete}>delete</button>
+          : <></>
+        }
+      </Togglable>
+    </div>  
+  )}
 
 export default Blog
 
