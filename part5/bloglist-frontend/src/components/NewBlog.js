@@ -52,7 +52,7 @@ const NewBlog = ({setBlogs,notification,blogs}) =>{
         name="title"
         onChange={({ target }) => setUrl(target.value)}
       /></p>
-      <button type="submit">create</button>
+      <button type="submit" id="form-newBlog-submit-button">create</button>
     </form>
   )}
 

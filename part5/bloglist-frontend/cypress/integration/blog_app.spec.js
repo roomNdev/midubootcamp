@@ -62,5 +62,43 @@ describe('blog app',()=>{
       cy.contains('view').click()
       cy.contains('delete').click()
     })
+    describe('and there is multiple blogs',function() {
+      beforeEach(function() {
+        const blog1 = {
+          author: 'second',
+          title: 'second',
+          url: 'second'
+        }
+        const blog2 = {
+          author: 'first',
+          title: 'first',
+          url: 'first',
+          likes: 3
+        }
+
+        cy.request({
+          url: 'http://localhost:3003/api/blogs',
+          method: 'POST',
+          body: blog1,
+          headers: {
+            Authorization: `bearer ${JSON.parse(localStorage.getItem('loggedNoteappUser')).token}`,
+          },
+        })
+        cy.request({
+          url: 'http://localhost:3003/api/blogs',
+          method: 'POST',
+          body: blog2,
+          headers: {
+            Authorization: `bearer ${JSON.parse(localStorage.getItem('loggedNoteappUser')).token}`,
+          },
+        })
+        cy.visit('http://localhost:3000')
+      })
+      it.only('blogs are ordered by likes',function() {
+        cy.get('h2.blogTitle').then((blogs)=>{
+          expect(blogs[0]).contain('first')
+        })
+      })
+    })
   })
 })
