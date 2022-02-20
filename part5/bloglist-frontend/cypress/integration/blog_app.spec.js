@@ -1,14 +1,11 @@
 
 describe('log form is shown and', function() {
   beforeEach(function() {
-    cy.request('POST', 'http://localhost:3003/api/reset')
     const user = {
-      name: 'Roman',
       username: 'romanpro',
       password: 'mariel0'
     }
-    cy.request('POST', 'http://localhost:3003/api/users', user) 
-    cy.visit('http://localhost:3000')
+    cy.resetReq(user)
   })
   it('is possible with correct credentials', function()  
   {
@@ -27,38 +24,22 @@ describe('log form is shown and', function() {
 describe('blog app',()=>{
   beforeEach(function() {
     
-    cy.request('POST', 'http://localhost:3003/api/reset')
     const user = {
-      name: 'Roman',
       username: 'romanpro',
       password: 'mariel0'
     }
-    cy.request('POST', 'http://localhost:3003/api/users', user) 
-    
-    cy.request('POST', 'http://localhost:3003/api/login', {
-      username: 'romanpro', password: 'mariel0'
-    }).then(response => {
-      localStorage.setItem('loggedNoteappUser', JSON.stringify(response.body))
-      cy.visit('http://localhost:3000')
-    })
+    cy.resetReq(user)
+    cy.login(user)
   })
   describe('When logged in', function() {
     
     it('a blog can be created and liked', function() {
-      cy.contains('Create a new blog').click()
-      cy.get('#title').type('new title')
-      cy.get('#author').type('author')
-      cy.get('#url').type('url')
-      cy.contains('create').click()
+      cy.createExampleBlog('new title', 'author', 'url')
       cy.contains('view').click()
       cy.contains('like').click()
     })
     it('a blog can be deleted',function() {
-      cy.contains('Create a new blog').click()
-      cy.get('#title').type('new title')
-      cy.get('#author').type('author')
-      cy.get('#url').type('url')
-      cy.contains('create').click()
+      cy.createExampleBlog('new title', 'author', 'url')
       cy.contains('view').click()
       cy.contains('delete').click()
     })
@@ -75,26 +56,10 @@ describe('blog app',()=>{
           url: 'first',
           likes: 3
         }
-
-        cy.request({
-          url: 'http://localhost:3003/api/blogs',
-          method: 'POST',
-          body: blog1,
-          headers: {
-            Authorization: `bearer ${JSON.parse(localStorage.getItem('loggedNoteappUser')).token}`,
-          },
-        })
-        cy.request({
-          url: 'http://localhost:3003/api/blogs',
-          method: 'POST',
-          body: blog2,
-          headers: {
-            Authorization: `bearer ${JSON.parse(localStorage.getItem('loggedNoteappUser')).token}`,
-          },
-        })
-        cy.visit('http://localhost:3000')
+        cy.createDefaultBlog(blog1)
+        cy.createDefaultBlog(blog2)
       })
-      it.only('blogs are ordered by likes',function() {
+      it('blogs are ordered by likes',function() {
         cy.get('h2.blogTitle').then((blogs)=>{
           expect(blogs[0]).contain('first')
         })
