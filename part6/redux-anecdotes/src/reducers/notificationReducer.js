@@ -13,10 +13,21 @@ switch (action.type) {
 
 export default notificationReducer
 
-export const setNotification = (content)=>{
-    return {
+export const setNotification = (content, duration)=>{
+    if(window._notificationTimeOut){
+        window.clearTimeout(window._notificationTimeOut)
+    }
+    return async (dispatch) => {
+        dispatch({
         type: 'SET_NOTIFICATION', 
         message: content
+        })
+        window._notificationTimeOut = setTimeout(() =>
+            dispatch({
+                type: 'DELETE_NOTIFICATION'
+                })
+            , duration * 1000
+        )    
     }
 }
 
