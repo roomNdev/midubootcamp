@@ -1,10 +1,11 @@
 import PropTypes from "prop-types"
 import React, { useState } from "react"
-import { useDispatch } from "react-redux"
+import { connect } from "react-redux"
+import {setBlogs} from "../reducers/blogReducers"
 import blogService from "../services/blogs"
 
-const NewBlog = ({ setBlogs, notification }) => {
-  const dispatch = useDispatch()
+const NewBlog = (props) => {
+  const { notification } = props
   const [title, setTitle] = useState("")
   const [author, setAuthor] = useState("")
   const [url, setUrl] = useState("")
@@ -20,13 +21,12 @@ const NewBlog = ({ setBlogs, notification }) => {
       console.log(newBlog)
       const response = await blogService.create(newBlog)
       notification(`New blog created '${title}' by ${author}`, "success")
-      dispatch(setBlogs(response))
+      props.setBlogs(response)
       setTitle("")
       setAuthor("")
       setUrl("")
     } catch (err) {
       notification("Couldn't create a new blog", "error")
-      console.log(err)
     }
   }
 
@@ -69,7 +69,15 @@ const NewBlog = ({ setBlogs, notification }) => {
   )
 }
 
-export { NewBlog }
+const mapDispatchToProps = {
+  setBlogs,
+}
+
+const ConnectedNotes = connect(
+  null,
+  mapDispatchToProps
+)(NewBlog)
+export default ConnectedNotes
 
 NewBlog.propTypes = {
   setBlogs: PropTypes.func.isRequired,

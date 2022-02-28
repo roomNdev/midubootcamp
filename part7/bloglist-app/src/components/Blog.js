@@ -2,11 +2,12 @@ import PropTypes from "prop-types"
 import React, { useState } from "react"
 import { Togglable } from "./Togglable"
 import blogService from "../services/blogs"
-import {useDispatch} from "react-redux"
+import { deleteBlog } from "../reducers/blogReducers"
+import {connect} from "react-redux"
 
-const Blog = ({ blog, deleteBlog, user, notification }) => {
+const Blog = ( props) => {
+  const { blog, user, notification } = props
   const [likes, setLikes] = useState(blog.likes)
-  const dispatch = useDispatch()
 
   const handleAddLike = async () => {
     try {
@@ -34,7 +35,7 @@ const Blog = ({ blog, deleteBlog, user, notification }) => {
     if (window.confirm(`Remove ${blog.title} by ${blog.author}?`)) {
       try {
         await blogService.deleteBlog(blogToDelete.id)
-        dispatch(deleteBlog(blogToDelete.id))
+        props.deleteBlog(blogToDelete.id)
         notification("succesfuly deleted blog", "success")
       } catch (err) {
         console.log(err)
@@ -58,8 +59,15 @@ const Blog = ({ blog, deleteBlog, user, notification }) => {
     </div>
   )
 }
+const mapDispatchToProps = {
+  deleteBlog,
+}
+const ConnectedNotes = connect(
+  null,
+  mapDispatchToProps
+)(Blog)
 
-export default Blog
+export default ConnectedNotes
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
