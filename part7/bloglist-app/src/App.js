@@ -8,6 +8,7 @@ import { Togglable } from "./components/Togglable"
 
 import { getAll, setBlogs, deleteBlog } from "./reducers/blogReducers"
 import { useSelector,useDispatch } from "react-redux"
+import {setUser} from "./reducers/userReducers"
 
 import blogService from "./services/blogs"
 
@@ -18,7 +19,8 @@ const App = () => {
 
   const [errorMessage, setErrorMessage] = useState({})
 
-  const [user, setUser] = useState(null)
+  const user = useSelector(state => state.user)
+  // const [user, setUser] = useState(null)
 
   const notification = (message, type) => {
     setErrorMessage({ message, type })
@@ -36,14 +38,14 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser")
     if (loggedUserJSON) {
       const newUser = JSON.parse(loggedUserJSON)
-      setUser(newUser)
+      dispatch(setUser(newUser))
       blogService.setToken(newUser.token)
     }
   }, [])
 
   const handlelogOut = () => {
     window.localStorage.removeItem("loggedNoteappUser")
-    setUser(null)
+    dispatch(setUser(null))
   }
 
   return (

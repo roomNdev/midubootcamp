@@ -1,26 +1,25 @@
 import PropTypes from "prop-types"
 import React, { useState } from "react"
-import blogService from "../services/blogs"
-import { login } from "../services/login"
+import {useDispatch} from  "react-redux"
+import {logIn} from "../reducers/userReducers"
 
-const LoginForm = ({ notification, setUser }) => {
+const LoginForm = ({ notification }) => {
+  const dispatch = useDispatch()
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
   const handleLogin = async event => {
     event.preventDefault()
     try {
-      const user = await login({
+      dispatch(logIn({
         username,
         password,
-      })
-      setUser(user)
-      window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user))
-      blogService.setToken(user.token)
+      }))
       notification("Succesfully logged", "success")
       setUsername("")
       setPassword("")
     } catch (exception) {
+      console.log(exception)
       notification("Wrong username or password", "error")
     }
   }

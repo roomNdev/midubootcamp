@@ -7,9 +7,11 @@ import { Provider } from "react-redux"
 import thunk from "redux-thunk"
 
 import blogReducer from "./reducers/blogReducers"
+import userReducer from "./reducers/userReducers"
 
 const reducer = combineReducers({
   blogs: blogReducer,
+  user: userReducer
 }
 )
 
