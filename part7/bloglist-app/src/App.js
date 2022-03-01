@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react"
-
-import ConnectedBlogs from "./components/Bloglist"
-import { LoginForm } from "./components/LoginForm"
-import NewBlog from "./components/NewBlog"
-import { Notification } from "./components/Notification"
-import { Togglable } from "./components/Togglable"
+import {Menu} from "./components/Menu"
 
 import { getAll, setBlogs, } from "./reducers/blogReducers"
 import { useSelector ,useDispatch } from "react-redux"
 import {setUser} from "./reducers/userReducers"
 
+import { Notification } from "./components/Notification"
+
 import blogService from "./services/blogs"
+import { Navigate } from "react-router-dom"
 
 const App = () => {
   const dispatch = useDispatch()
@@ -29,7 +27,7 @@ const App = () => {
   useEffect(() => {
     console.log(blogs)
     dispatch(getAll())
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser")
@@ -38,40 +36,33 @@ const App = () => {
       dispatch(setUser(newUser))
       blogService.setToken(newUser.token)
     }
-  }, [])
-
+  }, [dispatch])
+  
   const handlelogOut = () => {
     window.localStorage.removeItem("loggedNoteappUser")
     dispatch(setUser(null))
+    return<Navigate to="/login"/>
   }
 
   return (
     <div>
-      {user === null ? (
-        <>
-          <Notification message={errorMessage} />
-          <LoginForm notification={notification} setUser={setUser} />
-        </>
-      ) : (
-        <>
-          <Notification message={errorMessage} />
-          <p>
-            logged as {user.username}{" "}
+      {user === null
+        ? <p>loading...</p>
+        :
+        <><Notification message={errorMessage} />
+          <p>logged as {user.username}{" "}
             <button onClick={handlelogOut}>log out</button>
           </p>
-          <Togglable buttonLabel='Create a new blog'>
-            <NewBlog
-              setBlogs={setBlogs}
-              notification={notification}
-              blogs={blogs}
-            />
-          </Togglable>
-          <h2>blogs</h2>
-          <div>
-            <ConnectedBlogs notification={notification}/>
-          </div>
+          <Menu
+            errorMessage={errorMessage}
+            notification={notification}
+            setUser={setUser}
+            setBlogs={setBlogs}
+            blogs={blogs}
+            user={user}
+          />
         </>
-      )}
+      }
     </div>
   )
 }

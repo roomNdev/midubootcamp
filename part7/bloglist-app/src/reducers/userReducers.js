@@ -1,7 +1,7 @@
 import {login} from "../services/login"
 import blogService from "../services/blogs"
 
-const userReducer = (state={}, action) => {
+const userReducer = (state=null, action) => {
   switch (action.type) {
   case "@user/set_user":
     return action.data

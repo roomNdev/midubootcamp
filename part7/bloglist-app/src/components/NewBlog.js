@@ -80,7 +80,7 @@ const ConnectedNotes = connect(
 export default ConnectedNotes
 
 NewBlog.propTypes = {
-  setBlogs: PropTypes.func.isRequired,
-  blogs: PropTypes.array.isRequired,
+  setBlogs: PropTypes.func,
+  blogs: PropTypes.array,
   notification: PropTypes.func,
 }

@@ -1,5 +1,9 @@
 import PropTypes from "prop-types"
 import React, { useState } from "react"
+import {
+  useNavigate
+} from "react-router-dom"
+
 import {useDispatch} from  "react-redux"
 import {logIn} from "../reducers/userReducers"
 
@@ -7,6 +11,7 @@ const LoginForm = ({ notification }) => {
   const dispatch = useDispatch()
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const navigate = useNavigate()
 
   const handleLogin = async event => {
     event.preventDefault()
@@ -18,6 +23,7 @@ const LoginForm = ({ notification }) => {
       notification("Succesfully logged", "success")
       setUsername("")
       setPassword("")
+      navigate("/")
     } catch (exception) {
       console.log(exception)
       notification("Wrong username or password", "error")

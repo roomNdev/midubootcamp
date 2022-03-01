@@ -8,10 +8,12 @@ import thunk from "redux-thunk"
 
 import blogReducer from "./reducers/blogReducers"
 import userReducer from "./reducers/userReducers"
+import usersAmountReducer from "./reducers/allUsersReducer"
 
 const reducer = combineReducers({
   blogs: blogReducer,
-  user: userReducer
+  user: userReducer,
+  users: usersAmountReducer
 }
 )
 

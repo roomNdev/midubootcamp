@@ -1,26 +1,26 @@
 import PropTypes from "prop-types"
-import React, { useState } from "react"
-import { Togglable } from "./Togglable"
-import blogService from "../services/blogs"
-import { deleteBlog } from "../reducers/blogReducers"
-import {connect} from "react-redux"
+import React from "react"
+// import { Togglable } from "./Togglable"
+// import blogService from "../services/blogs"
+import {Link} from "react-router-dom"
 
 const Blog = ( props) => {
-  const { blog, user, notification } = props
-  const [likes, setLikes] = useState(blog.likes)
+  const { blog, } = props
+  // user, notification 
+  // const [likes, setLikes] = useState(blog.likes)
 
-  const handleAddLike = async () => {
-    try {
-      const blogToUpdate = { ...blog, likes: blog.likes + 1 }
-      await blogService.update(blogToUpdate)
-      setLikes(blogToUpdate.likes)
-      notification("added like", "success")
-    } catch (err) {
-      notification("couldn't update likes", "error")
-    }
-  }
+  // const handleAddLike = async () => {
+  //   try {
+  //     const blogToUpdate = { ...blog, likes: blog.likes + 1 }
+  //     await blogService.update(blogToUpdate)
+  //     setLikes(blogToUpdate.likes)
+  //     notification("added like", "success")
+  //   } catch (err) {
+  //     notification("couldn't update likes", "error")
+  //   }
+  // }
 
-  const userIsCreator = blog.user[0].username === user.username
+  // const userIsCreator = blog.user[0].username === user.username
 
   const blogStyle = {
     paddingTop: 10,
@@ -30,44 +30,36 @@ const Blog = ( props) => {
     marginBottom: 5,
   }
 
-  const handleDelete = async () => {
-    const blogToDelete = blog
-    if (window.confirm(`Remove ${blog.title} by ${blog.author}?`)) {
-      try {
-        await blogService.deleteBlog(blogToDelete.id)
-        props.deleteBlog(blogToDelete.id)
-        notification("succesfuly deleted blog", "success")
-      } catch (err) {
-        console.log(err)
-        notification("couldn't delete blog", "error")
-      }
-    }
-  }
+  // const handleDelete = async () => {
+  //   const blogToDelete = blog
+  //   if (window.confirm(`Remove ${blog.title} by ${blog.author}?`)) {
+  //     try {
+  //       await blogService.deleteBlog(blogToDelete.id)
+  //       props.deleteBlog(blogToDelete.id)
+  //       notification("succesfuly deleted blog", "success")
+  //     } catch (err) {
+  //       console.log(err)
+  //       notification("couldn't delete blog", "error")
+  //     }
+  //   }
+  // }
 
   return (
     <div style={blogStyle}>
-      <h2 className='blogTitle'>{blog.title} </h2>
-      <h2 className='blogAuthor'>{blog.author}</h2>
-      <Togglable buttonLabel='view'>
+      <Link to={`/blogs/${blog.id}`} className='blogTitle'>{blog.title} </Link>
+      <Link to={`/blogs/${blog.id}`} className='blogAuthor'>{blog.author}</Link>
+      {/* <Togglable buttonLabel='view'>
         <p className='blogUrl'>url: {blog.url}</p>
         <p className='blogLikes'>
           likes: {likes} <button onClick={handleAddLike}>like</button>
         </p>
         <p>{blog.user[0].username}</p>
         {userIsCreator ? <button onClick={handleDelete}>delete</button> : <></>}
-      </Togglable>
+      </Togglable> */}
     </div>
   )
 }
-const mapDispatchToProps = {
-  deleteBlog,
-}
-const ConnectedNotes = connect(
-  null,
-  mapDispatchToProps
-)(Blog)
-
-export default ConnectedNotes
+export default Blog
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,

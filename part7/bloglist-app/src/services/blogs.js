@@ -36,4 +36,9 @@ const deleteBlog = async newBlog => {
   return response.data
 }
 
-export default { getAll, create, setToken, update, deleteBlog }
+const getUsers = async () => {
+  const response = await axios.get("/api/users")
+  return response.data
+}
+
+export default { getAll, create, setToken, update, deleteBlog, getUsers }
