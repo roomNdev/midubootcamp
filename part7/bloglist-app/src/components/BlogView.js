@@ -1,16 +1,17 @@
-import React from "react"
+import React,{ useState} from "react"
 import {useParams, Navigate} from "react-router-dom"
 import PropTypes from "prop-types"
 import blogService from "../services/blogs"
-import {deleteBlog, addLikes} from "../reducers/blogReducers"
+import {deleteBlog, addLikes, updateComment} from "../reducers/blogReducers"
 import {useDispatch} from "react-redux"
 
 export const BlogView = (props) => {  
   const dispatch = useDispatch()
   const {user, notification, blogs} = props
   const id = useParams().id
+  const [comment, setComment] = useState("")
   const blog = blogs.find(blog => String(blog.id) === String(id))
-  console.log(blog)  
+  console.log(comment)  
   if (!blog) {
     return <Navigate to='/'/>
   }
@@ -45,6 +46,21 @@ export const BlogView = (props) => {
       }
     }
   }
+
+  const handleAddComment = async (e) => {
+    e.preventDefault()
+    const newBlog = {...blog, comments: blog.comments.concat(comment)}
+    console.log(newBlog)
+    try {
+      await blogService.updateComment(newBlog)
+      dispatch(updateComment(newBlog))
+      notification("succesfuly added comment", "success")
+      setComment("")
+    } catch (err) {
+      console.log(err)
+      notification("couldn't add comment", "error")
+    }
+  }
   return (
     <>
       <p>{blog.title}</p>
@@ -54,6 +70,19 @@ export const BlogView = (props) => {
       </p>
       <p>{blog.user[0].username}</p>
       {userIsCreator ? <button onClick={handleDelete}>delete</button> : <></>}
+      <h2>Comments</h2>
+      <ul>
+        {blog.comments.map((comment,i) => <li key={i}>{comment}</li>)}
+      </ul>
+      <form onSubmit={handleAddComment}>
+        <input
+          type="text" 
+          value={comment}
+          name='Comment'
+          onChange={({ target }) => setComment(target.value)}
+        />
+        <button>submit</button>
+      </form>
     </>
   )
 }

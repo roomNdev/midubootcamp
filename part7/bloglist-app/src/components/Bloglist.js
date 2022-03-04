@@ -20,7 +20,8 @@ const Bloglist = (props)=>{
             allBlogs={blogs}
             deleteBlog={deleteBlog}
             user={user}
-            notification={props.notification}>
+            notification={props.notification}
+          >
           </Blog>
         ))}
     </>
@@ -39,5 +40,6 @@ export default ConnectedBlogs
 Bloglist.propTypes = {
   blogs: PropTypes.array,
   user: PropTypes.object,
-  notification: PropTypes.func
+  notification: PropTypes.func,
+  comment: PropTypes.array
 }

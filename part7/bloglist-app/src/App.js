@@ -27,7 +27,7 @@ const App = () => {
   useEffect(() => {
     console.log(blogs)
     dispatch(getAll())
-  }, [dispatch])
+  }, [dispatch,])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser")

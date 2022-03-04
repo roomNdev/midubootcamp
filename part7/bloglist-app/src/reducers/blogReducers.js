@@ -49,3 +49,12 @@ export const getAll = () => {
     dispatch(setBlogs(blogs))
   }
 }
+
+export const updateComment = (data) => {
+  return async dispatch => {
+    dispatch({
+      type: "@blogs/update_blog",
+      data: data
+    })
+  }
+}
