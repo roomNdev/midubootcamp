@@ -30,7 +30,7 @@ const LoginForm = ({ notification }) => {
 
   return (
     <form onSubmit={handleLogin} className="grid grid-cols-3 grid-rows-3 justify-items-end items-center gap-x-4 w-72 ">
-      <p className="text-spanishviolet col-span-1 font-medium" >
+      <p className="text-spanishviolet col-span-1 font-medium my-1 mx-2" >
         username
       </p>
       <input
@@ -41,7 +41,7 @@ const LoginForm = ({ notification }) => {
         onChange={({ target }) => setUsername(target.value)}
         className="rounded-lg m-3 col-span-2"
       />
-      <p className="text-spanishviolet col-span-1 font-medium" >
+      <p className="text-spanishviolet col-span-1 font-medium mx-2" >
         password
       </p>
       <input

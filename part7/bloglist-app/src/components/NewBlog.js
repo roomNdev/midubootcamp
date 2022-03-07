@@ -31,8 +31,8 @@ const NewBlog = (props) => {
   }
 
   return (
-    <form onSubmit={handleNewBlog} id='create-new-blog-form' className="m-6 grid grid-cols-3 grid-rows-4 items-center justify-items-end gap-x-4 w-72">
-      <p className="text-spanishviolet col-span-1 font-medium" >
+    <form onSubmit={handleNewBlog} id='create-new-blog-form' className="m-6 grid grid-cols-3 grid-rows-4 items-center justify-items-center gap-x-4 w-72">
+      <p className="text-spanishviolet col-span-1 font-medium mx-3" >
         title:{" "}
       </p>
       <input
@@ -43,7 +43,7 @@ const NewBlog = (props) => {
         onChange={({ target }) => setTitle(target.value)}
         className="rounded-lg m-3 col-span-2 p-1"
       />
-      <p className="text-spanishviolet col-span-1 font-medium" >
+      <p className="text-spanishviolet col-span-1 font-medium mx-3" >
         author:{" "}
       </p>
       <input
@@ -54,7 +54,7 @@ const NewBlog = (props) => {
         onChange={({ target }) => setAuthor(target.value)}
         className="rounded-lg m-3 col-span-2 p-1"
       />
-      <p className="text-spanishviolet col-span-1 font-medium" >
+      <p className="text-spanishviolet col-span-1 font-medium mx-3" >
         url:{" "}
       </p>
       <input
