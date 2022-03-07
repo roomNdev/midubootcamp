@@ -8,8 +8,8 @@ export const Home = ({ setBlogs, blogs, notification}) =>{
 
 
   return (
-    <>
-      <h2>blogs</h2>
+    <div className="min-h-screen mx-auto flex flex-col items-center">
+      <h2 className="text-6xl text-spanishviolet">blogs</h2>
       <Togglable buttonLabel='Create a new blog'>
         <NewBlog
           setBlogs={setBlogs}
@@ -18,7 +18,7 @@ export const Home = ({ setBlogs, blogs, notification}) =>{
         />
       </Togglable>
       <ConnectedBlogs notification={notification}/>
-    </>
+    </div>
   )
 }
 

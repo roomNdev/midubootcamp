@@ -16,43 +16,45 @@ const LoginForm = ({ notification }) => {
   const handleLogin = async event => {
     event.preventDefault()
     try {
-      dispatch(logIn({
+      await dispatch(logIn({
         username,
         password,
       }))
       notification("Succesfully logged", "success")
-      setUsername("")
-      setPassword("")
       navigate("/")
-    } catch (exception) {
-      console.log(exception)
+    } catch (err) {
+      console.log(err)
       notification("Wrong username or password", "error")
     }
   }
 
   return (
-    <form onSubmit={handleLogin}>
-      <div>
+    <form onSubmit={handleLogin} className="grid grid-cols-3 grid-rows-3 justify-items-end items-center gap-x-4 w-72 ">
+      <p className="text-spanishviolet col-span-1 font-medium" >
         username
-        <input
-          id='login-form-input-username'
-          type='text'
-          value={username}
-          name='Username'
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
+      </p>
+      <input
+        id='login-form-input-username'
+        type='text'
+        value={username}
+        name='Username'
+        onChange={({ target }) => setUsername(target.value)}
+        className="rounded-lg m-3 col-span-2"
+      />
+      <p className="text-spanishviolet col-span-1 font-medium" >
         password
-        <input
-          id='login-form-input-password'
-          type='password'
-          value={password}
-          name='Password'
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type='submit'>login</button>
+      </p>
+      <input
+        id='login-form-input-password'
+        type='password'
+        value={password}
+        name='Password'
+        onChange={({ target }) => setPassword(target.value)}
+        className="rounded-lg m-3 col-span-2"
+      />
+      <button type='submit'
+        className="ring-2 ring-spanishviolet rounded-xl p-1 justify-self-center col-span-3 text-spanishviolet font-medium"
+      >login</button>
     </form>
   )
 }

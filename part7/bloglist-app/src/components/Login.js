@@ -7,7 +7,9 @@ export const Login = ({errorMessage, notification, setUser}) =>{
   return(
     <>
       <Notification message={errorMessage} />
-      <LoginForm notification={notification} setUser={setUser} />
+      <div className="flex justify-center">
+        <LoginForm notification={notification} setUser={setUser} />
+      </div>
     </>
   )
 }

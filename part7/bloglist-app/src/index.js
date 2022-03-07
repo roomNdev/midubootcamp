@@ -1,7 +1,7 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import App from "./App"
-import "./index.css"
+// import "./index.css"
 import { createStore, combineReducers, applyMiddleware } from "redux"
 import { Provider } from "react-redux"
 import thunk from "redux-thunk"
@@ -22,7 +22,9 @@ const store = createStore(reducer,
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <div className="min-h-screen bg-thistle">
+      <App />
+    </div>
   </Provider>,
   document.getElementById("root")
 )

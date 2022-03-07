@@ -63,7 +63,7 @@ export const BlogView = (props) => {
   }
   return (
     <>
-      <p>{blog.title}</p>
+      <p className="bg-gray-500">{blog.title}</p>
       <a className='blogUrl' href={blog.url}>url: {blog.url}</a>
       <p className='blogLikes'>
       likes: {blog.likes} <button onClick={handleAddLike}>like</button>

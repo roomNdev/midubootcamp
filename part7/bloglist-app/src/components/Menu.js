@@ -23,8 +23,10 @@ export const Menu = ({errorMessage,
   console.log(user)
   return (
     <Router>
-      <Link to="/">Home</Link>
-      <Link to="/users">Users</Link>
+      <div className="flex w-full justify-evenly items-start bg-pearlypurple ">
+        <Link to="/" className="text-white">Home</Link>
+        <Link to="/users" className="text-white">Users</Link>
+      </div>
       <Routes>
         <Route path="/" element={
           user === null

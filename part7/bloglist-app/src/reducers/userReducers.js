@@ -14,12 +14,15 @@ export default userReducer
 
 export const logIn = (user)=>{
   return async dispatch => {
-    const {username, password} = user
-    const res = await login({username,password,})
-    window.localStorage.setItem("loggedNoteappUser", JSON.stringify(res))
-    blogService.setToken(res)
-  
-    dispatch(setUser(res))
+    try{
+      const {username, password} = user
+      const res = await login({username,password,})
+      window.localStorage.setItem("loggedNoteappUser", JSON.stringify(res))
+      blogService.setToken(res)
+      dispatch(setUser(res))
+      return res
+    }
+    catch(err) {throw new Error(err)}
   }
 }
 

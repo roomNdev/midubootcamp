@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import {Menu} from "./components/Menu"
+import "tailwindcss/tailwind.css"
 
 import { getAll, setBlogs, } from "./reducers/blogReducers"
 import { useSelector ,useDispatch } from "react-redux"
@@ -45,14 +46,9 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div className="min-h-screen">
       {user === null
-        ? <p>loading...</p>
-        :
-        <><Notification message={errorMessage} />
-          <p>logged as {user.username}{" "}
-            <button onClick={handlelogOut}>log out</button>
-          </p>
+        ? <>
           <Menu
             errorMessage={errorMessage}
             notification={notification}
@@ -61,6 +57,24 @@ const App = () => {
             blogs={blogs}
             user={user}
           />
+        </>
+        :<>
+          <Notification message={errorMessage} />
+          <header className="flex justify-between bg-pearlypurple text-white">
+            <p className="w-auto px-3">logged as {user.username}{" "}
+            </p>
+            <button onClick={handlelogOut} className="w-auto px-3">log out</button>
+          </header>
+          <div className="min-h-screen">
+            <Menu
+              errorMessage={errorMessage}
+              notification={notification}
+              setUser={setUser}
+              setBlogs={setBlogs}
+              blogs={blogs}
+              user={user}
+            />
+          </div>
         </>
       }
     </div>
