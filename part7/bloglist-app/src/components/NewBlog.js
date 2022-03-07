@@ -41,7 +41,7 @@ const NewBlog = (props) => {
         value={title}
         name='title'
         onChange={({ target }) => setTitle(target.value)}
-        className="rounded-lg m-3 col-span-2"
+        className="rounded-lg m-3 col-span-2 p-1"
       />
       <p className="text-spanishviolet col-span-1 font-medium" >
         author:{" "}
@@ -52,7 +52,7 @@ const NewBlog = (props) => {
         value={author}
         name='author'
         onChange={({ target }) => setAuthor(target.value)}
-        className="rounded-lg m-3 col-span-2"
+        className="rounded-lg m-3 col-span-2 p-1"
       />
       <p className="text-spanishviolet col-span-1 font-medium" >
         url:{" "}
@@ -63,7 +63,7 @@ const NewBlog = (props) => {
         value={url}
         name='title'
         onChange={({ target }) => setUrl(target.value)}
-        className="rounded-lg m-3 col-span-2"
+        className="rounded-lg m-3 col-span-2 p-1"
       />
       <button type='submit' id='form-newBlog-submit-button' 
         className="ring-2 ring-spanishviolet rounded-xl p-1 justify-self-center col-span-3 text-spanishviolet font-medium">

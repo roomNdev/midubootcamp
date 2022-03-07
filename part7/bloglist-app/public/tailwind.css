@@ -188394,6 +188394,7 @@ video {
 
 *{
   font-weight: 400;
+  font-family: sans-serif;
 }
 
 .error {
@@ -188402,4 +188403,19 @@ video {
 
 .success {
   background-color: #b1fcb1 ;
+}
+
+.hover\:text-pearlypurple:hover {
+  --tw-text-opacity: 1;
+  color: rgba(161, 103, 165, var(--tw-text-opacity));
+}
+
+.hover\:ring-pearlypurple:hover {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgba(161, 103, 165, var(--tw-ring-opacity));
+}
+
+.border-spanishviolet {
+  --tw-border-opacity: 1;
+  border-color: rgba(74, 48, 109, var(--tw-border-opacity));
 }

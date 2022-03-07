@@ -1,5 +1,5 @@
 import React from "react"
-import {useParams} from "react-router-dom"
+import {useParams, Link} from "react-router-dom"
 import PropTypes from "prop-types"
 
 export const UserDisplay = ({users})=>{  
@@ -9,17 +9,19 @@ export const UserDisplay = ({users})=>{
     return <p>cannot find user</p>
   }
   return (
-    <>
-      <h1>{user.username}</h1>
-      <p>{user.name ? user.name : ""}</p>
-      <p>Blogs created</p>
+    <div className="flex flex-col items-center">
+      <h1 className="text-5xl p-4">{user.username}</h1>
+      <p className="text-2xl p-2">{user.name ? user.name : ""}</p>
+      <p className="text-3xl p-4">Blogs created</p>
       <ul>
         {user.blogs.map(blog => 
-          <li key={blog.id}>{blog.title}</li>
+          <li
+            className="list-disc hover:text-pearlypurple"
+            key={blog.id}><Link to={`/blogs/${blog.id}`}>{blog.title}</Link></li>
         )
         }
       </ul>
-    </>
+    </div>
   )
 }
 
